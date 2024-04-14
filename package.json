@@ -31,9 +31,6 @@
         "type": "",
         "url": "git://github.com/patryk-b/get-root.git"
     },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/patryk-b"
-    },
     "type": "commonjs",
     "main": "dist/src/get-root.js",
     "engines": {
