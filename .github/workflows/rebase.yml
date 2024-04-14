@@ -1,7 +1,7 @@
 # Workflow name:
 name: "rebase `master` branch."
 
-# permissions:
+# Special permissions for `secrets.GITHUB_TOKEN`:
 permissions:
   contents: write
 
@@ -9,6 +9,11 @@ permissions:
 on:
   # Demand:
   workflow_dispatch:
+
+# Variables:
+env:
+  SOURCE_BRANCH: dev
+  TARGET_BRANCH: master
 
 # Jobs:
 jobs:
@@ -54,25 +59,25 @@ jobs:
 
       # ensure <target> branch is fetched:
       - name: "REBASE: git checkout master"
-        run: git checkout master
+        run: git checkout $TARGET_BRANCH
 
       # ensure <source> branch is fetched:
       - name: "REBASE: git checkout dev"
-        run: git checkout dev
+        run: git checkout $SOURCE_BRANCH
 
       # rebase <source> <target>:
       - name: "REBASE: git rebase dev master"
-        run: git rebase dev master
+        run: git rebase $SOURCE_BRANCH $TARGET_BRANCH
 
       # ---- . ---- ---- ---- ---- . ----
       # TEST:
       # ---- . ---- ---- ---- ---- . ----
 
-      # ensure master is the active branch:
+      # ensure <target> is the active branch:
       - name: "TEST: git checkout master"
-        run: git checkout master
+        run: git checkout $TARGET_BRANCH
 
-      # run test before pushing to origin/master:
+      # run test before pushing to origin/<target>:
       - name: "TEST: run test"
         run: npm run test
 
@@ -82,4 +87,4 @@ jobs:
 
       # push changes:
       - name: "PUSH: git push origin master"
-        run: git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git master
+        run: git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $TARGET_BRANCH
