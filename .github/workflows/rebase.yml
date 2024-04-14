@@ -6,6 +6,10 @@ on:
   # Demand:
   workflow_dispatch:
 
+# permissions:
+permissions:
+  contents: write
+
 # Jobs:
 jobs:
   # ---- . ---- ---- ---- ---- . ----
@@ -28,23 +32,6 @@ jobs:
           ref: ${{ github.ref }}
           fetch-depth: 0
           submodules: recursive
-
-      # ---- . ---- ---- ---- ---- . ----
-      # GIT:
-      # ---- . ---- ---- ---- ---- . ----
-
-      - name: "GIT: setup config"
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
-
-      - name: "GIT: print user"
-        run: |
-          git config --global --get user.name
-          git config --global --get user.email
-
-      - name: "GIT: status"
-        run: git status
 
       # ---- . ---- ---- ---- ---- . ----
       # NODE:
@@ -95,4 +82,4 @@ jobs:
 
       # push changes:
       - name: "REBASE: git push origin master"
-        run: git push origin master
+        run: git push -u https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/Patryk-B/get-root.git master
