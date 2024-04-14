@@ -54,7 +54,7 @@ jobs:
         id: PACKAGE_VERSION
         uses: martinbeentjes/npm-get-version-action@v1.3.1
         with:
-          path: "package.json"
+          path: "."
 
       - name: "VERSION: print version"
         run: echo "$PACKAGE_VER"
