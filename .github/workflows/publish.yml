@@ -4,7 +4,6 @@ name: "publish `master` branch."
 # Special permissions for `secrets.GITHUB_TOKEN`:
 permissions:
   contents: write
-  packages: write
 
 # Run on:
 on:
