@@ -33,19 +33,13 @@ jobs:
       # NODE:
       # ---- . ---- ---- ---- ---- . ----
 
-      - name: "NODE: install node"
+      - name: "NODE: setup node"
         uses: actions/setup-node@v4
         with:
           node-version: latest
-          registry-url: https://npm.pkg.github.com/
-          cache-dependency-path: ./package-lock.json
-          cache: npm
 
       - name: "NODE: install dependencies"
-        shell: bash
-        run: |
-          npm ci
-          npm dedupe
+        run: npm ci && npm dedupe
 
       # ---- . ---- ---- ---- ---- . ----
       # VERSION:
