@@ -17,6 +17,23 @@ jobs:
 
     steps:
       # ---- . ---- ---- ---- ---- . ----
+      # GIT:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "GIT: setup config"
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+
+      - name: "GIT: print user"
+        run: |
+          git config --global --get user.name
+          git config --global --get user.email
+
+      - name: "GIT: status"
+        run: git status
+
+      # ---- . ---- ---- ---- ---- . ----
       # CHECKOUT:
       # ---- . ---- ---- ---- ---- . ----
 
@@ -30,20 +47,52 @@ jobs:
           submodules: recursive
 
       # ---- . ---- ---- ---- ---- . ----
+      # NODE:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "NODE: setup node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+      - name: "NODE: install dependencies"
+        run: npm ci && npm dedupe
+
+      # ---- . ---- ---- ---- ---- . ----
       # REBASE:
       # ---- . ---- ---- ---- ---- . ----
 
       - name: "REBASE: git fetch --all"
         run: git fetch --all
 
+      # ensure <target> branch is fetched:
       - name: "REBASE: git checkout master"
         run: git checkout master
 
+      # ensure <source> branch is fetched:
       - name: "REBASE: git checkout dev"
         run: git checkout dev
 
+      # rebase <source> <target>:
       - name: "REBASE: git rebase dev master"
         run: git rebase dev master
 
+      # ---- . ---- ---- ---- ---- . ----
+      # TEST:
+      # ---- . ---- ---- ---- ---- . ----
+
+      # ensure master is the active branch:
+      - name: "TEST: git checkout master"
+        run: git checkout master
+
+      # run test before pushing to origin/master:
+      - name: "TEST: run test"
+        run: npm run test
+
+      # ---- . ---- ---- ---- ---- . ----
+      # PUSH:
+      # ---- . ---- ---- ---- ---- . ----
+
+      # push changes:
       - name: "REBASE: git push origin master"
         run: git push origin master
