@@ -1,0 +1,5 @@
+# Ignore everything:
+*
+
+# Un-ignore 'dist/src' dir:
+!dist/src/**/*

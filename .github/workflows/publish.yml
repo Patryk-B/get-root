@@ -1,0 +1,98 @@
+# Workflow name:
+name: "publish `master` branch."
+
+# Run on:
+on:
+  # Demand:
+  workflow_dispatch:
+
+# Jobs:
+jobs:
+  # ---- . ---- ---- ---- ---- . ----
+  # Main:
+  # ---- . ---- ---- ---- ---- . ----
+  main:
+    name: "publish `master` branch."
+    runs-on: ubuntu-latest
+
+    steps:
+      # ---- . ---- ---- ---- ---- . ----
+      # CHECKOUT:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "CHECKOUT: `${{ github.repository }}`"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          submodules: recursive
+
+      # ---- . ---- ---- ---- ---- . ----
+      # NODE:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "NODE: install node"
+        uses: actions/setup-node@latest
+        with:
+          node-version: latest
+          registry-url: https://npm.pkg.github.com/
+          cache-dependency-path: ./package-lock.json
+          cache: npm
+
+      - name: "NODE: install dependencies"
+        shell: bash
+        run: |
+          npm ci
+          npm dedupe
+
+      # ---- . ---- ---- ---- ---- . ----
+      # VERSION:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "VERSION: get version from package.json"
+        id: PACKAGE_VERSION
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: "package.json"
+          prop_path: "version"
+
+      - name: "VERSION: print version"
+        run: echo "$PACKAGE_VER"
+        env:
+          PACKAGE_VER: v${{ steps.PACKAGE_VERSION.outputs.prop }}
+
+      # ---- . ---- ---- ---- ---- . ----
+      # NPM:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "NPM: run test"
+        run: npm run test
+
+      - name: "NPM: publish"
+        run: npm publish
+
+      # ---- . ---- ---- ---- ---- . ----
+      # GIT:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "GIT: tag"
+        run: git tag "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
+
+      - name: "GIT: push tag"
+        run: git push origin --tags
+
+      # ---- . ---- ---- ---- ---- . ----
+      # GITHUB: create Release:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "GITHUB: create release"
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
+          name: "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
+          draft: true
+          generateReleaseNotes: true

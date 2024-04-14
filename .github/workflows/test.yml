@@ -1,0 +1,60 @@
+# Workflow name:
+name: "test `dev` branch on commit."
+
+# Run on:
+on:
+  # Demand:
+  workflow_dispatch:
+
+  # Push to the `dev` branch:
+  push:
+    branches:
+      - dev
+
+# Jobs:
+jobs:
+  # ---- . ---- ---- ---- ---- . ----
+  # Main:
+  # ---- . ---- ---- ---- ---- . ----
+  main:
+    name: "test `master` branch."
+    runs-on: ubuntu-latest
+
+    steps:
+      # ---- . ---- ---- ---- ---- . ----
+      # CHECKOUT:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "CHECKOUT: `${{ github.repository }}`"
+        uses: actions/setup-node@latest
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          submodules: recursive
+
+      # ---- . ---- ---- ---- ---- . ----
+      # NODE:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "NODE: install node"
+        uses: actions/setup-node@latest
+        with:
+          node-version: latest
+          registry-url: https://npm.pkg.github.com/
+          cache-dependency-path: ./package-lock.json
+          cache: npm
+
+      - name: "NODE: install dependencies"
+        shell: bash
+        run: |
+          npm ci
+          npm dedupe
+
+      # ---- . ---- ---- ---- ---- . ----
+      # NPM: run test:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "NPM: run test"
+        run: npm run test

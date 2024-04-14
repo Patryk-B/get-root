@@ -1,0 +1,98 @@
+{
+    // ---- . ---- ---- ---- ---- . ----
+    // include:
+    // ---- . ---- ---- ---- ---- . ----
+
+    "include": [
+        "src/**/*",
+        "test/**/*"
+    ],
+    "exclude": [
+        "node_modules/**/*",
+        "dist/**/*"
+    ],
+
+    // ---- . ---- ---- ---- ---- . ----
+    // compiler options:
+    // ---- . ---- ---- ---- ---- . ----
+
+    "compilerOptions": {
+
+        // ---- . ---- ---- ---- ---- . ----
+        // plugins:
+        // - https://github.com/nonara/ts-patch
+        // - https://github.com/cevek/ttypescript
+        // ---- . ---- ---- ---- ---- . ----
+
+        "plugins": [
+            // Transform import paths in resulting `dist/**/*.js`:
+            { "transform": "typescript-transform-paths" },
+
+            // Transform import paths in resulting `dist/**/*.d.ts`:
+            { "transform": "typescript-transform-paths", "afterDeclarations": true }
+        ],
+
+        // ---- . ---- ---- ---- ---- . ----
+        // tsc:
+        // ---- . ---- ---- ---- ---- . ----
+
+        // module-ness of emitted code:
+        // - CommonJS:
+        "module": "CommonJS",
+        "moduleResolution": "node", // README: https://github.com/microsoft/TypeScript/issues/49160
+        "target": "ESNext",
+        "lib": [ "ESNext" ],
+
+        // project's root dir:
+        "rootDir": ".",
+
+        // project's output dir:
+        "outDir": "./dist",
+
+        // types:
+        "typeRoots": [
+            "./node_modules", // ......... makes it possible to use `@types/node` in `types: []`.
+            "./node_modules/@types" // ... makes it possible to use        `node` in `types: []`.
+        ],
+        "types": [
+            "@types/node",
+            "@types/jest"
+        ],
+
+        // aliases:
+        "baseUrl": ".",
+        "paths": {
+            "#root/*": [ "." ],
+            "#config/*": [ "config/*" ],
+            "#assets/*": [ "assets/*" ],
+            "#bin/*": [ "bin/*" ],
+            "#build/*": [ "build/*" ],
+            "#dist/*": [ "dist/*" ],
+            "#scripts/*": [ "scripts/*" ],
+            "#src/*": [ "src/*" ],
+            "#test/*": [ "test/*" ]
+        },
+
+        // strict:
+        "strict": true,
+        "alwaysStrict": true,
+
+        // emitted files:
+        "declaration": true,
+        "sourceMap": true,
+        "newLine": "crlf",
+        "removeComments": true,
+        "esModuleInterop": true,
+
+        // what can be imported:
+        "allowJs": true,
+        "checkJs": true,
+        "resolveJsonModule": true,
+
+        // errors:
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "forceConsistentCasingInFileNames": true,
+        "allowUnreachableCode": false,
+    },
+}
