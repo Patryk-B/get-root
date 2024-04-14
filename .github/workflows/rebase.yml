@@ -1,0 +1,49 @@
+# Workflow name:
+name: "rebase `master` branch."
+
+# Run on:
+on:
+  # Demand:
+  workflow_dispatch:
+
+# Jobs:
+jobs:
+  # ---- . ---- ---- ---- ---- . ----
+  # Main:
+  # ---- . ---- ---- ---- ---- . ----
+  main:
+    name: "rebase `master` branch."
+    runs-on: ubuntu-latest
+
+    steps:
+      # ---- . ---- ---- ---- ---- . ----
+      # CHECKOUT:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "CHECKOUT: `${{ github.repository }}`"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          submodules: recursive
+
+      # ---- . ---- ---- ---- ---- . ----
+      # REBASE:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "REBASE: git fetch --all"
+        run: git fetch --all
+
+      - name: "REBASE: git checkout master"
+        run: git checkout master
+
+      - name: "REBASE: git checkout dev"
+        run: git checkout dev
+
+      - name: "REBASE: git rebase master"
+        run: git rebase master
+
+      - name: "REBASE: git push origin dev"
+        run: git push origin dev
