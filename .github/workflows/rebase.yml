@@ -82,4 +82,4 @@ jobs:
 
       # push changes:
       - name: "PUSH: git push origin master"
-        run: git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/Patryk-B/get-root.git master
+        run: git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git master
