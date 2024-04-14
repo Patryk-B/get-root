@@ -1,14 +1,14 @@
 # Workflow name:
 name: "rebase `master` branch."
 
+# permissions:
+permissions:
+  contents: write
+
 # Run on:
 on:
   # Demand:
   workflow_dispatch:
-
-# permissions:
-permissions:
-  contents: write
 
 # Jobs:
 jobs:
