@@ -42,8 +42,8 @@ jobs:
       - name: "REBASE: git checkout dev"
         run: git checkout dev
 
-      - name: "REBASE: git rebase master"
-        run: git rebase master
+      - name: "REBASE: git rebase dev master"
+        run: git rebase dev master
 
-      - name: "REBASE: git push origin dev"
-        run: git push origin dev
+      - name: "REBASE: git push origin master"
+        run: git push origin master
