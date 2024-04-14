@@ -21,7 +21,7 @@ jobs:
       # ---- . ---- ---- ---- ---- . ----
 
       - name: "CHECKOUT: `${{ github.repository }}`"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
@@ -34,7 +34,7 @@ jobs:
       # ---- . ---- ---- ---- ---- . ----
 
       - name: "NODE: install node"
-        uses: actions/setup-node@latest
+        uses: actions/setup-node@4
         with:
           node-version: latest
           registry-url: https://npm.pkg.github.com/
