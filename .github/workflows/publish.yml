@@ -73,13 +73,11 @@ jobs:
       - name: "PUBLISH: npm run test"
         run: npm run test
 
-      # Login to npm via ~/.npmrc:
-      - name: "PUBLISH: echo 'token' > ~/.npmrc"
-        run: npm set "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}"
-
       # Publish:
       - name: "PUBLISH: npm publish"
         run: npm publish --scope="@patryk-b" --registry="https://registry.npmjs.org" --access="public"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}"
 
       # ---- . ---- ---- ---- ---- . ----
       # TAG:
