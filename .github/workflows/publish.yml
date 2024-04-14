@@ -83,8 +83,6 @@ jobs:
       # NPM publish:
       - name: "PUBLISH: npm publish"
         run: npm publish --scope="@patryk-b" --registry="https://registry.npmjs.org" --access="public"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}"
 
       # ---- . ---- ---- ---- ---- . ----
       # TAG:
