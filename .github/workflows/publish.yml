@@ -3,6 +3,7 @@ name: "publish `master` branch."
 
 # Special permissions for `secrets.GITHUB_TOKEN`:
 permissions:
+  contents: write
   packages: write
 
 # Run on:
@@ -98,10 +99,9 @@ jobs:
 
       - name: "RELEASE: create github release"
         id: create_release
-        uses: ncipollo/release-action@v1
+        uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
-          name: "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
-          draft: true
-          generateReleaseNotes: true
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          title: "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
+          automatic_release_tag: "latest"
+          prerelease: true
