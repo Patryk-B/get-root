@@ -59,7 +59,7 @@ jobs:
       - name: "VERSION: print version"
         run: echo "$PACKAGE_VER"
         env:
-          PACKAGE_VER: v${{ steps.PACKAGE_VERSION.outputs.prop }}
+          PACKAGE_VER: v${{ steps.PACKAGE_VERSION.outputs.current-version }}
 
       # ---- . ---- ---- ---- ---- . ----
       # PUBLISH:
@@ -87,7 +87,7 @@ jobs:
 
       # Create new tag:
       - name: "TAG: git tag"
-        run: git tag "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
+        run: git tag "v${{ steps.PACKAGE_VERSION.outputs.current-version }}"
 
       # Push tag:
       - name: "TAG: git push origin --tags"
@@ -99,9 +99,9 @@ jobs:
 
       - name: "RELEASE: create github release"
         id: create_release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: softprops/action-gh-release@v2
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          title: "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
-          automatic_release_tag: "latest"
-          prerelease: true
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: "v${{ steps.PACKAGE_VERSION.outputs.current-version }}"
+          tag_name: "latest"
+          make_latest: true
