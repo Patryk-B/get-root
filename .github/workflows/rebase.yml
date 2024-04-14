@@ -17,6 +17,19 @@ jobs:
 
     steps:
       # ---- . ---- ---- ---- ---- . ----
+      # CHECKOUT:
+      # ---- . ---- ---- ---- ---- . ----
+
+      - name: "CHECKOUT: `${{ github.repository }}`"
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+          submodules: recursive
+
+      # ---- . ---- ---- ---- ---- . ----
       # GIT:
       # ---- . ---- ---- ---- ---- . ----
 
@@ -32,19 +45,6 @@ jobs:
 
       - name: "GIT: status"
         run: git status
-
-      # ---- . ---- ---- ---- ---- . ----
-      # CHECKOUT:
-      # ---- . ---- ---- ---- ---- . ----
-
-      - name: "CHECKOUT: `${{ github.repository }}`"
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          ref: ${{ github.ref }}
-          fetch-depth: 0
-          submodules: recursive
 
       # ---- . ---- ---- ---- ---- . ----
       # NODE:
