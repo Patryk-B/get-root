@@ -47,10 +47,9 @@ jobs:
 
       - name: "VERSION: get version from package.json"
         id: PACKAGE_VERSION
-        uses: notiz-dev/github-action-json-property@release
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
         with:
           path: "package.json"
-          prop_path: "version"
 
       - name: "VERSION: print version"
         run: echo "$PACKAGE_VER"
@@ -58,30 +57,38 @@ jobs:
           PACKAGE_VER: v${{ steps.PACKAGE_VERSION.outputs.prop }}
 
       # ---- . ---- ---- ---- ---- . ----
-      # NPM:
+      # PUBLISH:
       # ---- . ---- ---- ---- ---- . ----
 
-      - name: "NPM: run test"
+      # Ensure master branch is active:
+      - name: "PUBLISH: git checkout master"
+        run: git checkout $TARGET_BRANCH
+
+      # Test before publishing:
+      - name: "PUBLISH: npm run test"
         run: npm run test
 
-      - name: "NPM: publish"
+      # Publish:
+      - name: "PUBLISH: npm publish"
         run: npm publish
 
       # ---- . ---- ---- ---- ---- . ----
-      # GIT:
+      # TAG:
       # ---- . ---- ---- ---- ---- . ----
 
-      - name: "GIT: tag"
+      # Create new tag:
+      - name: "TAG: git tag"
         run: git tag "v${{ steps.PACKAGE_VERSION.outputs.prop }}"
 
-      - name: "GIT: push tag"
-        run: git push origin --tags
+      # Push tag:
+      - name: "TAG: git push origin --tags"
+        run: git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git --tags
 
       # ---- . ---- ---- ---- ---- . ----
-      # GITHUB: create Release:
+      # RELEASE:
       # ---- . ---- ---- ---- ---- . ----
 
-      - name: "GITHUB: create release"
+      - name: "RELEASE: create github release"
         id: create_release
         uses: ncipollo/release-action@v1
         with:

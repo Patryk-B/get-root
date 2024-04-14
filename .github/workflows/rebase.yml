@@ -69,22 +69,14 @@ jobs:
       - name: "REBASE: git rebase dev master"
         run: git rebase $SOURCE_BRANCH $TARGET_BRANCH
 
-      # ---- . ---- ---- ---- ---- . ----
-      # TEST:
-      # ---- . ---- ---- ---- ---- . ----
-
-      # ensure <target> is the active branch:
-      - name: "TEST: git checkout master"
+      # ensure <target> branch is active:
+      - name: "REBASE: git checkout master"
         run: git checkout $TARGET_BRANCH
 
       # run test before pushing to origin/<target>:
-      - name: "TEST: run test"
+      - name: "REBASE: run test"
         run: npm run test
 
-      # ---- . ---- ---- ---- ---- . ----
-      # PUSH:
-      # ---- . ---- ---- ---- ---- . ----
-
       # push changes:
-      - name: "PUSH: git push origin master"
+      - name: "REBASE: git push origin master"
         run: git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git $TARGET_BRANCH
