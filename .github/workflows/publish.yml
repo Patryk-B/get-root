@@ -73,7 +73,14 @@ jobs:
       - name: "PUBLISH: npm run test"
         run: npm run test
 
-      # Publish:
+      # NPM login via ~/.npmrc:
+      - name: "PUBLISH: echo 'token' > ~/.npmrc"
+        run: |
+          echo 'registry=https://registry.npmjs.org/' > ~/.npmrc
+          echo '//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}' >> ~/.npmrc
+          echo '//registry.npmjs.org/:always-auth=true' >> ~/.npmrc
+
+      # NPM publish:
       - name: "PUBLISH: npm publish"
         run: npm publish --scope="@patryk-b" --registry="https://registry.npmjs.org" --access="public"
         env:
