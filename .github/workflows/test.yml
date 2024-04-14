@@ -17,7 +17,7 @@ jobs:
   # Main:
   # ---- . ---- ---- ---- ---- . ----
   main:
-    name: "test `master` branch."
+    name: "test `dev` branch on commit."
     runs-on: ubuntu-latest
 
     steps:
