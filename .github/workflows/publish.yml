@@ -1,6 +1,10 @@
 # Workflow name:
 name: "publish `master` branch."
 
+# Special permissions for `secrets.GITHUB_TOKEN`:
+permissions:
+  packages: write
+
 # Run on:
 on:
   # Demand:
@@ -62,11 +66,15 @@ jobs:
 
       # Ensure master branch is active:
       - name: "PUBLISH: git checkout master"
-        run: git checkout $TARGET_BRANCH
+        run: git checkout master
 
       # Test before publishing:
       - name: "PUBLISH: npm run test"
         run: npm run test
+
+      # Login via ~/.npmrc:
+      - name: "PUBLISH: echo 'token' > ~/.npmrc"
+        run: echo '//npm.pkg.github.com/patryk-b/:_authToken=${{ secrets.GITHUB_TOKEN }}' > ~/.npmrc
 
       # Publish:
       - name: "PUBLISH: npm publish"
