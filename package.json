@@ -1,6 +1,6 @@
 {
     "name": "@patryk-b/get-root",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "simple package to consistently locate root directory of an project.",
     "author": {
         "name": "Patryk-B",
